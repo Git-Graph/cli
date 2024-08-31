@@ -21,10 +21,10 @@ export function getConfig():Config{
     return {};
 }
 
-export function setConfig(usercode:string){
-    console.log(usercode)
+export function setConfig(token:string){
+    console.log(token)
     const config=getConfig();
-    config.userCode=usercode;
+    config.userCode=token;
     try{
         fs.writeFileSync(CONFIG_FILE,JSON.stringify(config));
     }
@@ -34,6 +34,7 @@ export function setConfig(usercode:string){
 }
 
 export function clearConfig(){
+    console.log('hello');
     try{
         fs.unlinkSync(CONFIG_FILE);
     }
