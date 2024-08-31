@@ -22,7 +22,9 @@ program
 program
     .command('auth')
     .description("Authenticate to use website and see your flowcharts")
-    .action(() => authenticate());
+    .option('-r, --register','Register ')
+    .option('-l, --login','login your account')
+    .action((options) => authenticate(options));
 
 program.command('status')
     .description('git ka status dikhata hai')
@@ -47,9 +49,3 @@ program
     })
 
 program.parse()
-
-// const option:Option=
-//hello
-console.log("hello")
-console.log("bye");
-console.log("chalo")

@@ -22,6 +22,7 @@ export function getConfig():Config{
 }
 
 export function setConfig(usercode:string){
+    console.log(usercode)
     const config=getConfig();
     config.userCode=usercode;
     try{
