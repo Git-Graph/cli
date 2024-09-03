@@ -4,6 +4,8 @@ import { Option, program } from "commander";
 import add from './commands/add';
 import commit from "./commands/commit";
 import authenticate from "./commands/authenticate";
+import { initRepo } from "./commands/init";
+import { getConfig } from "../config/config";
 
 const options: Partial<SimpleGitOptions> = {
     baseDir: process.cwd(),
@@ -19,12 +21,19 @@ program
     .name('gg')
     .description('CLI tool to make flowcharts of git repositories')
 
+program.command('token').action(()=>console.log(getConfig()))
+
 program
     .command('auth')
     .description("Authenticate to use website and see your flowcharts")
     .option('-r, --register','Register ')
     .option('-l, --login','login your account')
     .action((options) => authenticate(options));
+
+program
+.command('init')
+.description("Initialize repositories for git and gitgraph")
+.action(()=> initRepo(git))
 
 program.command('status')
     .description('git ka status dikhata hai')
