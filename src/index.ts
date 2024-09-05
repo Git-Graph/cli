@@ -5,8 +5,9 @@ import add from './commands/add';
 import commit from "./commands/commit";
 import authenticate from "./commands/authenticate";
 import { initRepo } from "./commands/init";
-import { getConfig } from "../config/config";
-
+import { clearConfig, getConfig } from "../config/config";
+import { getId } from "../config/idManager";
+import axios from "axios";
 const options: Partial<SimpleGitOptions> = {
     baseDir: process.cwd(),
     binary: 'git',
@@ -14,26 +15,39 @@ const options: Partial<SimpleGitOptions> = {
     trimmed: false,
 }
 
-const git: SimpleGit = simpleGit(options)
+const git: SimpleGit = simpleGit(options);
 
+
+const token=getConfig().userCode;
 
 program
     .name('gg')
     .description('CLI tool to make flowcharts of git repositories')
+    // .action(async()=>{
+    //     const repoId=await getId();
+    //     const response=await axios.post('http://localhost:8000/commands/commit',{
+    //         message:"Helllo"
+    //     },{
+    //         headers:{
+    //             Authorization:`Bearer ${token}`,
+    //             repoId
+    //         }
+    //     })
+    // })
 
-program.command('token').action(()=>console.log(getConfig()))
+program.command('token').action(() => console.log(getConfig()))
 
 program
     .command('auth')
     .description("Authenticate to use website and see your flowcharts")
-    .option('-r, --register','Register ')
-    .option('-l, --login','login your account')
+    .option('-r, --register', 'Register ')
+    .option('-l, --login', 'login your account')
     .action((options) => authenticate(options));
 
 program
-.command('init')
-.description("Initialize repositories for git and gitgraph")
-.action(()=> initRepo(git))
+    .command('init')
+    .description("Initialize repositories for git and gitgraph")
+    .action(() => initRepo(git))
 
 program.command('status')
     .description('git ka status dikhata hai')
@@ -50,11 +64,8 @@ program
     .command('commit')
     .option('-m, --message <message>', 'Commit Message')
     .action((options) => {
-        // if(!options.message){
-        //     console.log("Add a commit message");
-        //     process.exit(1);
-        // }
+
         commit(git, options.message)
     })
 
-program.parse()
+program.parse();
