@@ -32,9 +32,6 @@ export const initRepo = async (git: SimpleGit) => {
         else {
             console.log("Error", res.data);
         }
-
-        //console.log(await getId());
-        
     }
     else {
         console.log("Login first");

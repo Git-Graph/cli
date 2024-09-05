@@ -33,7 +33,7 @@ const commit = async (git:SimpleGit, message:string)=>{
     },{
         headers:{
             Authorization:`Bearer ${token}`,
-            'repoId':repoId,
+            repoId
         }
     })
 
