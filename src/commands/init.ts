@@ -2,6 +2,8 @@ import { SimpleGit } from "simple-git";
 import readline from "readline-sync";
 import axios from "axios";
 import { getConfig } from "../../config/config";
+import { getId, storeId } from "../../config/idManager";
+
 
 export const initRepo = async (git: SimpleGit) => {
     console.log("Initialize your git repo");
@@ -23,14 +25,19 @@ export const initRepo = async (git: SimpleGit) => {
         )
 
         if (res.status === 200) {
-            console.log(res.data);
+            console.log(res.data.id);
+            await storeId(res.data.id);
             git.init();
         }
         else {
             console.log("Error", res.data);
         }
+
+        //console.log(await getId());
+        
     }
     else {
         console.log("Login first");
     }
 }
+

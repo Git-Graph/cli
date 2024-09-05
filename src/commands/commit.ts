@@ -1,14 +1,19 @@
 import { SimpleGit } from "simple-git";
 import axios from "axios";
 import { getConfig } from "../../config/config";
+import { getId } from "../../config/idManager";
 
 const userCode=getConfig().userCode;
 
 const commit = async (git:SimpleGit, message:string)=>{
-    if (!userCode){
-        console.log("Please login and then try to commit");
+    const token=getConfig().userCode;
+    const repoId=await getId();
+    if (!token && !repoId){
+        console.log("Please login and initialize repo then try to commit");
         process.exit(1);
     }
+
+    console.log(token," ",repoId)
     const status=await git.status()
     console.log(typeof(status.staged))
     if(status.staged.length===0){
@@ -23,10 +28,16 @@ const commit = async (git:SimpleGit, message:string)=>{
         }
     }
     console.log(await git.commit(message,status.staged));
-    await axios.post('http://localhost:8000/commit',{
-        userCode,
+    const response=await axios.post('http://localhost:8000/commands/commit',{
         message
+    },{
+        headers:{
+            Authorization:`Bearer ${token}`,
+            'repoId':repoId,
+        }
     })
+
+    console.log(response.data);
 }
 
 export default commit;
